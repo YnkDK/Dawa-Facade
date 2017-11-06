@@ -13,8 +13,17 @@ from dawa_facade.util.exceptions import UnknownContentType, JSONDecodeError
 
 
 class Replication(object):
+    """Handles everything about replication.
+
+    DAWA does not guarantee referential integrity, e.g. it is possible that an address have been created with a street
+    code or municipality code, that does not yet reference a section of a street. Your system should handle this.
+
+    Events happens in near real time. The source is the data source for BBR (Bygnings- og Boligregisteret).
+
+    NB: The postal code of an address and supplementary city names are only updated once per day.
+    """
     def __init__(self, session: dawa_facade.util.dawa_session.DawaSession):
-        self.session = session
+        self._session = session
 
     def get_sequence_number(self) -> SequenceNumber:
         """Polls the latest sequence number from DAWA
@@ -24,7 +33,7 @@ class Replication(object):
         :return: The latest sequence number
         """
         # Get the sequence number from DAWA
-        response = self.session.get('/replikering/senestesekvensnummer?noformat')  # type: Response
+        response = self._session.get('/replikering/senestesekvensnummer?noformat')  # type: Response
 
         # Check that the content type is as expected
         content_type = response.headers.get('Content-Type', 'unknown')  # type: str
