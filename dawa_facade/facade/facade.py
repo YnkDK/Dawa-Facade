@@ -5,7 +5,9 @@ Copyright 2017 Martin Storgaard Dieu under The MIT License
 
 Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
-import requests
+
+from dawa_facade.facade.replication import Replication
+from dawa_facade.util.dawa_session import DawaSession
 
 
 class DawaFacade(object):
@@ -18,15 +20,18 @@ class DawaFacade(object):
             self.base_url = base_url
 
         self.session = self._create_session()
+        self.replication = Replication(self.session)
 
-    @staticmethod
-    def _create_session():
-        from . import __version__
+    def _create_session(self):
+        from dawa_facade import __version__
         ua = 'Mozilla/5.0 (compatible; Dawa-Facade/{version:s}; +https://github.com/YnkDK/Dawa-Facade)'.format(
             version=__version__
         )
-        session = requests.Session()
+        session = DawaSession(self.base_url)
         session.headers.update({
-            'User-Agent': ua
+            'User-Agent': ua,
+            'Accept': 'application/json',
+            'Connection': 'keep-alive',
+            'X-Test': '123'
         })
         return session

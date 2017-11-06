@@ -15,3 +15,15 @@ class DawaException(Exception):
     """
     title = ''
     details = dict()
+
+    def __init__(self, details: dict=None):
+        if isinstance(details, dict):
+            self.details = details
+
+
+class UnknownContentType(DawaException):
+    title = 'Unknown content type'
+
+
+class JSONDecodeError(DawaException):
+    title = 'JSON decode error'
