@@ -6,7 +6,6 @@ Copyright 2017 Martin Storgaard Dieu under The MIT License
 Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
 import datetime
-
 from dawa_facade.responses import BaseResponse, parse_datetime
 
 
@@ -17,10 +16,11 @@ class SequenceNumber(BaseResponse):
 
     """
     def __init__(self, **kwargs) -> None:
-        super().__init__(
-            sequence_number=int(kwargs['sekvensnummer']),
-            timestamp=parse_datetime(kwargs['tidspunkt'])
-        )
+        kwargs['sequence_number'] = int(kwargs['sekvensnummer'])
+        kwargs['timestamp'] = parse_datetime(kwargs['tidspunkt'])
+        del kwargs['sekvensnummer']
+        del kwargs['tidspunkt']
+        super().__init__(**kwargs)
 
     @property
     def sequence_number(self) -> int:

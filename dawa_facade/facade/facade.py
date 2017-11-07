@@ -5,13 +5,14 @@ Copyright 2017 Martin Storgaard Dieu under The MIT License
 
 Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
-
 from dawa_facade.facade.replication import Replication
 from dawa_facade.util.dawa_session import DawaSession
+import requests.adapters
 
 
 class DawaFacade(object):
     base_url = 'https://dawa.aws.dk'
+    adapter = requests.adapters.HTTPAdapter()
 
     def __init__(self, base_url: str=None, timeout=305):
         self.timeout = timeout
@@ -30,8 +31,7 @@ class DawaFacade(object):
         session = DawaSession(self.base_url)
         session.headers.update({
             'User-Agent': ua,
-            'Accept': 'application/json',
-            'Connection': 'keep-alive',
-            'X-Test': '123'
+            'Accept': 'application/json'
         })
+        session.mount(self.base_url, self.adapter)
         return session
