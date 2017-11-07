@@ -6,8 +6,9 @@ Copyright 2017 Martin Storgaard Dieu under The MIT License
 Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
 import json.decoder
+
 import dawa_facade.util.dawa_session
-from dawa_facade.responses.sequence_number import SequenceNumber
+from dawa_facade.responses.replication.sequence_number import SequenceNumber
 from dawa_facade.util.exceptions import JSONDecodeError
 
 
@@ -46,3 +47,33 @@ class Replication(object):
             })
         # Marshal the response
         return SequenceNumber(**data)
+
+    def get_postal_codes(self, from_sequence_number=None, to_sequence_number=None):
+        """
+
+        :param SequenceNumber | int | None from_sequence_number:
+        :param SequenceNumber | int | None to_sequence_number:
+        :return:
+        """
+        if isinstance(from_sequence_number, SequenceNumber):
+            from_sequence_number = from_sequence_number.sequence_number
+        elif from_sequence_number is None:
+            from_sequence_number = 0
+        assert isinstance(from_sequence_number, int), 'Invalid from_sequence_number provided'
+        if isinstance(to_sequence_number, SequenceNumber):
+            to_sequence_number = to_sequence_number.sequence_number
+        elif to_sequence_number is None:
+            to_sequence_number = self.get_sequence_number().sequence_number
+        assert isinstance(to_sequence_number, int), 'Invalid to_sequence_number provided'
+
+        response = self._session.get(
+            url='/replikering/adresser/haendelser',
+            params={
+                'sekvensnummerfra': from_sequence_number,
+                'sekvensnummertil': to_sequence_number,
+                'noformat': ''
+            },
+            stream=True
+        )
+        for content in response.iter_content(chunk_size=512):
+            print(content)
