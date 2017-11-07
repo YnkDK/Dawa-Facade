@@ -10,13 +10,14 @@ import dawa_facade.util.exceptions
 
 
 class DawaSession(requests.Session):
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str, timeout):
         super().__init__()
         self.base_url = base_url
+        self.timeout = timeout
 
     def request(self, method, url, params=None, data=None, headers=None, cookies=None, files=None, auth=None,
-                timeout=None, allow_redirects=True, proxies=None, hooks=None, stream=None, verify=None, cert=None,
-                json=None):
+                allow_redirects=True, proxies=None, hooks=None, stream=None, verify=None, cert=None,
+                json=None, **kwargs):
         """Constructs a :class:`Request <Request>`, prepares it and sends it.
 
         If the URL starts with / then the url is prefixed by the base url.
@@ -58,13 +59,17 @@ class DawaSession(requests.Session):
         """
         if url.startswith('/'):
             url = self.base_url + url
+
+        timeout = self.timeout
+        if 'timeout' in kwargs:
+            timeout = kwargs['timeout']
         return super().request(method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects,
                                proxies, hooks, stream, verify, cert, json)
 
     def get(self, url, **kwargs) -> requests.Response:
-        """Sends a GET request. Returns :class:`Response` object.
+        """Sends a GET request. Returns :class:`requests.Response` object.
 
-        :param url: URL for the new :class:`Request` object.
+        :param url: URL for the new :class:`requests.Request` object.
         :param kwargs: Optional arguments that ``request`` takes.
         """
         response = super().get(url, **kwargs)
