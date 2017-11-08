@@ -36,10 +36,11 @@ class DawaStream(object):
             if b'' == self.buffer:
                 # There is nothing left to consume
                 raise e
-            # Empty the buffer
-            content = self.buffer
-            self.buffer = b''
-            return content
+            if len(self.buffer) <= size:
+                # Empty the buffer, otherwise do as usual
+                content = self.buffer
+                self.buffer = b''
+                return content
 
         # Extract the desired size from the buffer and save the remaining data in the buffer
         content = self.buffer[:size]
@@ -47,8 +48,7 @@ class DawaStream(object):
         return content
 
 
-def yield_response(response: requests.Response, response_class):
-    assert issubclass(response_class, dawa_facade.responses.BaseResponse)
+def yield_response(response: requests.Response):
 
     # Instantiate the JSON parser
     parser = ijson.parse(DawaStream(response))
@@ -64,7 +64,7 @@ def yield_response(response: requests.Response, response_class):
                     builder.event(event, value)
                     current, event, value = next(parser)
                 # We now have a complete object in the list
-                yield response_class(**getattr(builder, 'value'))
+                yield getattr(builder, 'value')
     except StopIteration:
         pass
 

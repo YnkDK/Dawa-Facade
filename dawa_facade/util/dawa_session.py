@@ -72,6 +72,8 @@ class DawaSession(requests.Session):
         :param url: URL for the new :class:`requests.Request` object.
         :param kwargs: Optional arguments that ``request`` takes.
         """
+        if 'stream' not in kwargs:
+            kwargs['stream'] = True
         response = super().get(url, **kwargs)
         # Check that the content type is as expected
         content_type = response.headers.get('Content-Type', '** NOT IN RESPONSE HEADERS **')  # type: str

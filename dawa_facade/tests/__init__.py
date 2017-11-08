@@ -9,4 +9,4 @@ from dawa_facade import DawaFacade
 
 dawa = DawaFacade()
 for postal_code in dawa.replication.get_postal_codes():
-    print(type(postal_code), postal_code)
+    print(type(postal_code), postal_code, flush=True)

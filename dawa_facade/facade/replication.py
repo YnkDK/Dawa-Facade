@@ -56,6 +56,7 @@ class Replication(object):
         :param SequenceNumber | int | None from_sequence_number:
         :param SequenceNumber | int | None to_sequence_number:
         :return:
+        :rtype: list of PostalCode
         """
         if isinstance(from_sequence_number, SequenceNumber):
             from_sequence_number = from_sequence_number.sequence_number
@@ -77,6 +78,6 @@ class Replication(object):
             }
         )
 
-        for data in yield_response(response=response, response_class=PostalCode):
-            yield data
+        for data in yield_response(response=response):
+            yield PostalCode(**data)
 
