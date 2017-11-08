@@ -8,8 +8,10 @@ Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 import json.decoder
 
 import dawa_facade.util.dawa_session
+from dawa_facade.responses.replication.postal_code import PostalCode
 from dawa_facade.responses.replication.sequence_number import SequenceNumber
 from dawa_facade.util.exceptions import JSONDecodeError
+from dawa_facade.util.response_yielder import yield_response
 
 
 class Replication(object):
@@ -67,13 +69,14 @@ class Replication(object):
         assert isinstance(to_sequence_number, int), 'Invalid to_sequence_number provided'
 
         response = self._session.get(
-            url='/replikering/adresser/haendelser',
+            url='/replikering/postnumre/haendelser',
             params={
                 'sekvensnummerfra': from_sequence_number,
                 'sekvensnummertil': to_sequence_number,
                 'noformat': ''
-            },
-            stream=True
+            }
         )
-        for content in response.iter_content(chunk_size=512):
-            print(content)
+
+        for data in yield_response(response=response, response_class=PostalCode):
+            yield data
+

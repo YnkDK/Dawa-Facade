@@ -12,7 +12,7 @@ except ImportError:
 
 import re
 
-reqs = ['requests>=2.5']
+reqs = ['requests>=2.5', 'ijson==2.3']
 
 tests_requires = []
 

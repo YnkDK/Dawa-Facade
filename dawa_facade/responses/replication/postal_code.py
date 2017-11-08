@@ -5,6 +5,8 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Martin Storgaard Dieu <ms@intramanager.com>, november 2017
 """
+import datetime
+
 from dawa_facade.responses import BaseResponse, parse_datetime
 
 
@@ -12,6 +14,15 @@ class PostalCodeData(BaseResponse):
     """
 
     """
+
+    def __init__(self, **kwargs) -> None:
+        kwargs['postal_code'] = kwargs['nr']
+        kwargs['name'] = kwargs['navn']
+        kwargs['is_major_recipient'] = kwargs['stormodtager']
+        del kwargs['nr']
+        del kwargs['navn']
+        del kwargs['stormodtager']
+        super().__init__(**kwargs)
 
 
 class PostalCode(BaseResponse):
@@ -43,3 +54,11 @@ class PostalCode(BaseResponse):
         :return: The timestamp (tidspunkt)
         """
         return super().get('timestamp')
+
+    @property
+    def data(self) -> PostalCodeData:
+        """The data
+
+        :return: The data (data)
+        """
+        return super().get('data')
