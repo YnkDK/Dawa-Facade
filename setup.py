@@ -14,7 +14,7 @@ import re
 
 reqs = ['requests>=2.5', 'ijson==2.3']
 
-tests_requires = []
+tests_requires = ['requests_mock']
 
 with open('dawa_facade/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE).group(1)

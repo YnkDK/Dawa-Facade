@@ -49,3 +49,11 @@ class DawaFacade(object):
             'Accept': 'application/json'
         })
         return session
+
+    def __del__(self):
+        """Clean up after us
+
+        Closes all adapters and such the session
+        """
+        if isinstance(self.session, DawaSession):
+            self.session.close()
