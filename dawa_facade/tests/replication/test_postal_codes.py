@@ -11,7 +11,7 @@ from dawa_facade import DawaFacade
 import requests_mock
 import os.path
 import os
-from dawa_facade.responses.replication.postal_code import PostalCode
+from dawa_facade.responses.replication.postal_code import PostalCode, PostalCodeData
 
 
 class PostalCodeTestCase(unittest.TestCase):
@@ -82,6 +82,30 @@ class PostalCodeTestCase(unittest.TestCase):
             postal_codes.append(postal_code)
         # Compare if we got what we expected
         self.assertListEqual(EXPECTED_POSTAL_CODES_990_1000, postal_codes)
+
+    @unittest.skipIf('TEST_ONLINE' not in os.environ, "Add TEST_ONLINE to environment, e.g. export TEST_ONLINE=")
+    def test_get_all_changes(self):
+        # When calling with no parameters, we get all events that has ever happened
+        generator = self.facade.replication.get_postal_codes()
+
+        last = next(generator)
+        self.assertIsInstance(last, PostalCode)
+        for postal_code in generator:
+            # Check that the sequence numbers are ascending
+            self.assertGreater(postal_code.sequence_number, last.sequence_number)
+            # Check that marshall is working
+            self.assertIsInstance(postal_code, PostalCode)
+            self.assertIsInstance(postal_code.timestamp, datetime.datetime)
+            self.assertIsInstance(postal_code.sequence_number, int)
+            self.assertIsInstance(postal_code.data, PostalCodeData)
+            self.assertIsInstance(postal_code.data.postal_code, str)
+            self.assertIsInstance(postal_code.data.name, str)
+            self.assertIsInstance(postal_code.data.is_major_recipient, bool)
+
+            # Check that the postal code satisfies the specification
+            self.assertTrue(len(postal_code.data.postal_code) == 4, postal_code.data.postal_code)
+            # Check that the name satisfies the specification
+            self.assertTrue(len(postal_code.data.name) <= 20, postal_code.data.name)
 
 
 EXPECTED_POSTAL_CODES_990_1000 = [

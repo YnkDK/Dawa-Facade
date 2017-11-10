@@ -24,6 +24,30 @@ class PostalCodeData(BaseResponse):
         del kwargs['stormodtager']
         super().__init__(**kwargs)
 
+    @property
+    def postal_code(self) -> str:
+        """Unique identification of the postal code. Postal codes are defined by Post Danmark.
+
+        :return: A four digit postal code, e.g. "2400" for "København NV” (nr)
+        """
+        return super().get('postal_code')
+
+    @property
+    def name(self) -> str:
+        """The name attached to the postal code. This is typically the name of the city or neighbourhood.
+
+        :return: A 20 character name, e.g. "København NV” (navn)
+        """
+        return super().get('name')
+
+    @property
+    def is_major_recipient(self) -> bool:
+        """If the postal code is a special type attached to an organization.
+
+        :return: True if the postal code is attached to an organization, False otherwise
+        """
+        return super().get('is_major_recipient')
+
 
 class PostalCode(BaseResponse):
     """A sequence number
