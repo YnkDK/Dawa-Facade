@@ -20,7 +20,7 @@ class BaseResponse(dict):
 
 def parse_datetime(value) -> datetime.datetime:
         if value is None:
-            raise ValueError('None is not a datetime')
+            return None
         try:
             value = int(value)
         except (ValueError, TypeError):
