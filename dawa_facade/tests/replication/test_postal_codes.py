@@ -100,7 +100,7 @@ class PostalCodeTestCase(unittest.TestCase):
             self.assertIsInstance(postal_code.data, PostalCodeData)
             self.assertIsInstance(postal_code.data.postal_code, str)
             self.assertIsInstance(postal_code.data.name, str)
-            self.assertIsInstance(postal_code.data.is_major_recipient, bool)
+            self.assertIsInstance(postal_code.data.is_organisational, bool)
 
             # Check that the postal code satisfies the specification
             self.assertTrue(len(postal_code.data.postal_code) == 4, postal_code.data.postal_code)
@@ -116,7 +116,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Sorring',
             'postal_code': '8641',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 990
     },
@@ -126,7 +126,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Ans By',
             'postal_code': '8643',
-            'is_major_recipient': False
+            'is_organisational': False
          },
         'sequence_number': 991
     },
@@ -136,7 +136,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Them',
             'postal_code': '8653',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 992
     },
@@ -146,7 +146,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Bryrup',
             'postal_code': '8654',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 993
     },
@@ -156,7 +156,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Skanderborg',
             'postal_code': '8660',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 994
     },
@@ -166,7 +166,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Låsby',
             'postal_code': '8670',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 995
     },
@@ -176,7 +176,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Ry',
             'postal_code': '8680',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 996
     },
@@ -186,7 +186,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Horsens',
             'postal_code': '8700',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 997
     },
@@ -196,7 +196,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Daugård',
             'postal_code': '8721',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 998
     },
@@ -206,7 +206,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Hedensted',
             'postal_code': '8722',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 999
     },
@@ -216,7 +216,7 @@ EXPECTED_POSTAL_CODES_990_1000 = [
         'data': {
             'name': 'Løsning',
             'postal_code': '8723',
-            'is_major_recipient': False
+            'is_organisational': False
         },
         'sequence_number': 1000
     }

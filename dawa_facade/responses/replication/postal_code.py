@@ -18,7 +18,7 @@ class PostalCodeData(BaseResponse):
     def __init__(self, **kwargs) -> None:
         kwargs['postal_code'] = kwargs['nr']
         kwargs['name'] = kwargs['navn']
-        kwargs['is_major_recipient'] = kwargs['stormodtager']
+        kwargs['is_organisational'] = kwargs['stormodtager']
         del kwargs['nr']
         del kwargs['navn']
         del kwargs['stormodtager']
@@ -41,12 +41,12 @@ class PostalCodeData(BaseResponse):
         return super().get('name')
 
     @property
-    def is_major_recipient(self) -> bool:
+    def is_organisational(self) -> bool:
         """If the postal code is a special type attached to an organization.
 
-        :return: True if the postal code is attached to an organization, False otherwise
+        :return: True if the postal code is attached to an organisation, False otherwise
         """
-        return super().get('is_major_recipient')
+        return super().get('is_organisational')
 
 
 class PostalCode(BaseResponse):
