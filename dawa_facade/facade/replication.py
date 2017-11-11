@@ -8,8 +8,9 @@ Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 import json.decoder
 
 import dawa_facade.util.dawa_session
-from dawa_facade.responses.replication.postal_code import PostalCode
+from dawa_facade.responses.replication.postal_code import PostalCodeEvent
 from dawa_facade.responses.replication.sequence_number import SequenceNumber
+from dawa_facade.responses.replication.street import StreetEvent
 from dawa_facade.util.exceptions import JSONDecodeError
 from dawa_facade.util.response_yielder import yield_response
 
@@ -26,6 +27,25 @@ class Replication(object):
     """
     def __init__(self, session: dawa_facade.util.dawa_session.DawaSession):
         self._session = session
+
+    def _parse_from_to_sequence_numbers(self, from_sequence_number, to_sequence_number) -> (int, int):
+        """Parse the input used for most methods
+
+        :param SequenceNumber | int | None from_sequence_number:
+        :param SequenceNumber | int | None to_sequence_number:
+        :return:
+        """
+        if isinstance(from_sequence_number, SequenceNumber):
+            from_sequence_number = from_sequence_number.sequence_number
+        elif from_sequence_number is None:
+            from_sequence_number = 0
+        assert isinstance(from_sequence_number, int), 'Invalid from_sequence_number provided'
+        if isinstance(to_sequence_number, SequenceNumber):
+            to_sequence_number = to_sequence_number.sequence_number
+        elif to_sequence_number is None:
+            to_sequence_number = self.get_sequence_number().sequence_number
+        assert isinstance(to_sequence_number, int), 'Invalid to_sequence_number provided'
+        return from_sequence_number, to_sequence_number
 
     def get_sequence_number(self) -> SequenceNumber:
         """Polls the latest sequence number from DAWA
@@ -56,18 +76,11 @@ class Replication(object):
         :param SequenceNumber | int | None from_sequence_number:
         :param SequenceNumber | int | None to_sequence_number:
         :return:
-        :rtype: list of PostalCode
+        :rtype: list of PostalCodeEvent
         """
-        if isinstance(from_sequence_number, SequenceNumber):
-            from_sequence_number = from_sequence_number.sequence_number
-        elif from_sequence_number is None:
-            from_sequence_number = 0
-        assert isinstance(from_sequence_number, int), 'Invalid from_sequence_number provided'
-        if isinstance(to_sequence_number, SequenceNumber):
-            to_sequence_number = to_sequence_number.sequence_number
-        elif to_sequence_number is None:
-            to_sequence_number = self.get_sequence_number().sequence_number
-        assert isinstance(to_sequence_number, int), 'Invalid to_sequence_number provided'
+        from_sequence_number, to_sequence_number = self._parse_from_to_sequence_numbers(
+            from_sequence_number=from_sequence_number, to_sequence_number=to_sequence_number
+        )
 
         response = self._session.get(
             url='/replikering/postnumre/haendelser',
@@ -79,5 +92,24 @@ class Replication(object):
         )
 
         for data in yield_response(response=response):
-            yield PostalCode(**data)
+            yield PostalCodeEvent(**data)
 
+    def get_streets(self, from_sequence_number=None, to_sequence_number=None):
+        """
+
+        :param SequenceNumber | int | None from_sequence_number:
+        :param SequenceNumber | int | None to_sequence_number:
+        :return:
+        :rtype: list of StreetEvent
+        """
+        response = self._session.get(
+            url='/replikering/vejstykker/haendelser',
+            params={
+                'sekvensnummerfra': from_sequence_number,
+                'sekvensnummertil': to_sequence_number,
+                'noformat': ''
+            }
+        )
+
+        for data in yield_response(response=response):
+            yield StreetEvent(**data)

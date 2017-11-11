@@ -49,7 +49,7 @@ class PostalCodeData(BaseResponse):
         return super().get('is_organisational')
 
 
-class PostalCode(BaseResponse):
+class PostalCodeEvent(BaseResponse):
     """A sequence number
 
     A unique sequence number for an event in DAWA
@@ -58,6 +58,7 @@ class PostalCode(BaseResponse):
     def __init__(self, **kwargs) -> None:
         kwargs['sequence_number'] = int(kwargs['sekvensnummer'])
         kwargs['timestamp'] = parse_datetime(kwargs['tidspunkt'])
+        kwargs['operation'] = kwargs['operation'].lower()
         kwargs['data'] = PostalCodeData(**kwargs['data'])
         del kwargs['sekvensnummer']
         del kwargs['tidspunkt']
@@ -78,6 +79,14 @@ class PostalCode(BaseResponse):
         :return: The timestamp (tidspunkt)
         """
         return super().get('timestamp')
+
+    @property
+    def operation(self) -> str:
+        """The type of event: insert, update, delete
+
+        :return: The type of the event (operation)
+        """
+        return super().get('operation')
 
     @property
     def data(self) -> PostalCodeData:

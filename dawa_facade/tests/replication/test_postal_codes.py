@@ -11,7 +11,7 @@ from dawa_facade import DawaFacade
 import requests_mock
 import os.path
 import os
-from dawa_facade.responses.replication.postal_code import PostalCode, PostalCodeData
+from dawa_facade.responses.replication.postal_code import PostalCodeEvent, PostalCodeData
 
 
 class PostalCodeTestCase(unittest.TestCase):
@@ -77,7 +77,7 @@ class PostalCodeTestCase(unittest.TestCase):
         postal_codes = []
         for postal_code in generator:
             # Check that marshall is working
-            self.assertIsInstance(postal_code, PostalCode)
+            self.assertIsInstance(postal_code, PostalCodeEvent)
             # Store it to compare if we got what we expected
             postal_codes.append(postal_code)
         # Compare if we got what we expected
@@ -89,12 +89,12 @@ class PostalCodeTestCase(unittest.TestCase):
         generator = self.facade.replication.get_postal_codes()
 
         last = next(generator)
-        self.assertIsInstance(last, PostalCode)
+        self.assertIsInstance(last, PostalCodeEvent)
         for postal_code in generator:
             # Check that the sequence numbers are ascending
             self.assertGreater(postal_code.sequence_number, last.sequence_number)
             # Check that marshall is working
-            self.assertIsInstance(postal_code, PostalCode)
+            self.assertIsInstance(postal_code, PostalCodeEvent)
             self.assertIsInstance(postal_code.timestamp, datetime.datetime)
             self.assertIsInstance(postal_code.sequence_number, int)
             self.assertIsInstance(postal_code.data, PostalCodeData)
