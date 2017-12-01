@@ -8,6 +8,7 @@ Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 import json.decoder
 
 import dawa_facade.util.dawa_session
+from dawa_facade.responses.replication.address import AddressEvent
 from dawa_facade.responses.replication.postal_code import PostalCodeEvent
 from dawa_facade.responses.replication.sequence_number import SequenceNumber
 from dawa_facade.responses.replication.street import StreetEvent
@@ -103,6 +104,9 @@ class Replication(object):
         :return:
         :rtype: list of StreetEvent
         """
+        from_sequence_number, to_sequence_number = self._parse_from_to_sequence_numbers(
+            from_sequence_number=from_sequence_number, to_sequence_number=to_sequence_number
+        )
         response = self._session.get(
             url='/replikering/vejstykker/haendelser',
             params={
@@ -123,6 +127,9 @@ class Replication(object):
         :return:
         :rtype: list of AccessAddressEvent
         """
+        from_sequence_number, to_sequence_number = self._parse_from_to_sequence_numbers(
+            from_sequence_number=from_sequence_number, to_sequence_number=to_sequence_number
+        )
         response = self._session.get(
             url='/replikering/adgangsadresser/haendelser',
             params={
@@ -134,3 +141,26 @@ class Replication(object):
 
         for data in yield_response(response=response):
             yield AccessAddressEvent(**data)
+
+    def get_addresses(self, from_sequence_number=None, to_sequence_number=None):
+        """
+
+        :param SequenceNumber | int | None from_sequence_number:
+        :param SequenceNumber | int | None to_sequence_number:
+        :return:
+        :rtype: list of AccessAddressEvent
+        """
+        from_sequence_number, to_sequence_number = self._parse_from_to_sequence_numbers(
+            from_sequence_number=from_sequence_number, to_sequence_number=to_sequence_number
+        )
+        response = self._session.get(
+            url='/replikering/adresser/haendelser',
+            params={
+                'sekvensnummerfra': from_sequence_number,
+                'sekvensnummertil': to_sequence_number,
+                'noformat': ''
+            }
+        )
+
+        for data in yield_response(response=response):
+            yield AddressEvent(**data)
