@@ -14,6 +14,7 @@ from dawa_facade.responses.replication.postal_code import PostalCodeEvent
 from dawa_facade.responses.replication.sequence_number import SequenceNumber
 from dawa_facade.responses.replication.street import StreetEvent
 from dawa_facade.responses.replication.access_address import AccessAddressEvent
+from dawa_facade.responses.replication.street_postal_code_relation import StreetPostalCodeRelationEvent
 from dawa_facade.util.exceptions import JSONDecodeError
 from dawa_facade.util.response_yielder import yield_response
 
@@ -188,3 +189,26 @@ class Replication(object):
 
         for data in yield_response(response=response):
             yield HouseownersAssociationEvent(**data)
+
+    def get_street_postal_code_relations(self, from_sequence_number=None, to_sequence_number=None):
+        """
+
+        :param SequenceNumber | int | None from_sequence_number:
+        :param SequenceNumber | int | None to_sequence_number:
+        :return:
+        :rtype: list of StreetPostalCodeRelationEvent
+        """
+        from_sequence_number, to_sequence_number = self._parse_from_to_sequence_numbers(
+            from_sequence_number=from_sequence_number, to_sequence_number=to_sequence_number
+        )
+        response = self._session.get(
+            url='/replikering/vejstykkepostnummerrelationer/haendelser',
+            params={
+                'sekvensnummerfra': from_sequence_number,
+                'sekvensnummertil': to_sequence_number,
+                'noformat': ''
+            }
+        )
+
+        for data in yield_response(response=response):
+            yield StreetPostalCodeRelationEvent(**data)
