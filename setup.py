@@ -23,7 +23,7 @@ if not version:
     raise RuntimeError('Cannot find version information')
 
 setup(
-    name='dawa-facade',
+    name='dawa_facade',
     version=version,
     description='Python client for Danmarks Adressers Web API',
     author_email="martin@storgaarddieu.com",
@@ -31,7 +31,8 @@ setup(
     url="https://github.com/YnkDK/Dawa-Facade",
     packages=['dawa_facade'],
     license='MIT',
-    install_requires=reqs
-    # tests_requires=tests_requires,
+    install_requires=reqs,
+    tests_requires=tests_requires,
+    keywords=['dawa', 'Danmarks Adressers Web API', 'addresses', 'adresser', 'denmark', 'danmark']
     # test_suite='nose.collector'
 )
