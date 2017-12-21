@@ -7,4 +7,4 @@ Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
 from .facade.facade import DawaFacade
 
-__version__ = '2017.12.1.beta'
+__version__ = '2017.12.1.b1'

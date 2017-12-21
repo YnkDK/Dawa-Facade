@@ -34,5 +34,5 @@ setup(
     install_requires=reqs,
     tests_requires=tests_requires,
     keywords=['dawa', 'Danmarks Adressers Web API', 'addresses', 'adresser', 'denmark', 'danmark'],
-    download_url='https://github.com/YnkDK/Dawa-Facade/archive/2017.12.3.beta.tar.gz'
+    download_url='https://github.com/YnkDK/Dawa-Facade/archive/2017.12.1.b1.tar.gz'
 )
