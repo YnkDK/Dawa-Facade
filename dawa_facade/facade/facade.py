@@ -42,10 +42,10 @@ class DawaFacade(object):
         })
         self.replication = Replication(self.session)
 
-    def __del__(self):
-        """Clean up after us
-
-        Closes all adapters and such the session
-        """
-        if isinstance(self.session, DawaSession):
-            self.session.close()
+    # def __del__(self):
+    #     """Clean up after us
+    #
+    #     Closes all adapters and such the session
+    #     """
+    #     if isinstance(self.session, DawaSession):
+    #         self.session.close()
