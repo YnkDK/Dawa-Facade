@@ -28,27 +28,19 @@ class DawaFacade(object):
         else:
             self.base_url = 'https://dawa.aws.dk'
 
-        self.session = self._create_session()
-        self.replication = Replication(self.session)
-
-    def _create_session(self) -> DawaSession:
-        """Creates a new session used for all subsequent calls
-
-        :return: The new session
-        """
         # Create the User-Agent so DAWA knows that we made the request
         from dawa_facade import __version__
         ua = 'Mozilla/5.0 (compatible; Dawa-Facade/{version:s}; +https://github.com/YnkDK/Dawa-Facade)'.format(
             version=__version__
         )
-
+        # Removed _create_session to create a strong reference (https://stackoverflow.com/a/1482477/4620080)
         # Create the session
-        session = DawaSession(base_url=self.base_url, timeout=self.timeout)
-        session.headers.update({
+        self.session = DawaSession(base_url=self.base_url, timeout=self.timeout)
+        self.session.headers.update({
             'User-Agent': ua,
             'Accept': 'application/json'
         })
-        return session
+        self.replication = Replication(self.session)
 
     def __del__(self):
         """Clean up after us
