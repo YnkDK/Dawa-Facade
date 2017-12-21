@@ -33,6 +33,7 @@ setup(
     license='MIT',
     install_requires=reqs,
     tests_requires=tests_requires,
-    keywords=['dawa', 'Danmarks Adressers Web API', 'addresses', 'adresser', 'denmark', 'danmark']
+    keywords=['dawa', 'Danmarks Adressers Web API', 'addresses', 'adresser', 'denmark', 'danmark'],
+    download_url='https://github.com/YnkDK/Dawa-Facade/archive/2017.12.1.beta.tar.gz'
     # test_suite='nose.collector'
 )
