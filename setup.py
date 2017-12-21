@@ -5,10 +5,7 @@ Copyright 2017 Martin Storgaard Dieu under The MIT License
 
 Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 import re
 
@@ -29,7 +26,7 @@ setup(
     author_email="martin@storgaarddieu.com",
     author="Martin Storgaard Dieu",
     url="https://github.com/YnkDK/Dawa-Facade",
-    packages=['dawa_facade'],
+    packages=find_packages(),
     license='MIT',
     install_requires=reqs,
     tests_requires=tests_requires,

@@ -7,6 +7,6 @@ Written by Martin Storgaard Dieu <martin@storgaarddieu.com>, november 2017
 """
 import dawa_facade.facade.facade
 
-__version__ = '2017.12.1.b2'
+__version__ = '2017.12.1.b3'
 
 DawaFacade = dawa_facade.facade.facade.DawaFacade
